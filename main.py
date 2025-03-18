@@ -1,40 +1,31 @@
+import sys
+from stats import get_num_words, letter_count, sort_on
+
+
+def get_book_text(file_path):
+    with open(file_path, "r") as file:
+        return file.read()
+
+
 def main():
-    book = "books/frankenstein.txt"
-    file_content = open_book(book)
-    count = wordcount(file_content)
-    letter = letter_count(file_content)
+    if len(sys.argv) < 2:
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1)
+    book_text = get_book_text(sys.argv[1])
+    get_num_words(book_text)
+    st = letter_count(book_text)
+    sortert_liste = sort_on(st)
 
-    print(f"--- Begin report of book {book} ---")
-    print(f"{count} words found in the document")
-    print()
-
-    for key, value in letter.items():
-        if not key.isalpha():
-            continue
-        print(f"The {key} character was found {value} times")
-
-    print("--- End report ---")
-
-
-def wordcount(content):
-    word = content.split()
-    return len(word)
-
-
-def open_book(book):
-    with open(book) as f:
-        return f.read()
-
-
-def letter_count(st):
-    letter = {}
-    for x in st:
-        lowered = x.lower()
-        if lowered in letter:
-            letter[lowered] += 1
-        else:
-            letter[lowered] = 1
-    return letter
+    print("============ BOOKBOT ============")
+    print("----------- Word Count ----------")
+    print(f"Found {get_num_words(book_text)} total words")
+    print("--------- Character Count -------")
+    for item in sortert_liste:
+        character = item["name"]
+        count = item["num"]
+        if character.isalpha():
+            print(f"{character}: {count}")
+    print("============= END ===============")
 
 
 if __name__ == "__main__":
